@@ -3,6 +3,7 @@ package com.devhb.employeeservice.service.impl;
 import com.devhb.employeeservice.dto.APIResponseDto;
 import com.devhb.employeeservice.dto.DepartmentDto;
 import com.devhb.employeeservice.dto.EmployeeDto;
+import com.devhb.employeeservice.dto.OrganizationDto;
 import com.devhb.employeeservice.entity.Employee;
 import com.devhb.employeeservice.mapper.EmployeeMapper;
 import com.devhb.employeeservice.repository.EmployeeRepository;
@@ -50,10 +51,15 @@ public class EmployeeServiceImpl implements EmployeeService {
        DepartmentDto departmentDto = webClient.get().uri("http://localhost:8080/api/departments/" + employee.getDepartmentCode()).retrieve()
                 .bodyToMono(DepartmentDto.class).block();
    //     DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
+
+        OrganizationDto organizationDto = webClient.get().uri("http://localhost:8083/api/organizations/" + employee.getOrganizationCode()).retrieve()
+                .bodyToMono(OrganizationDto.class).block();
+
        EmployeeDto employeeDto = EmployeeMapper.mapToEmployeeDto(employee);
         APIResponseDto apiResponseDto = new APIResponseDto();
         apiResponseDto.setEmployee(employeeDto);
         apiResponseDto.setDepartment(departmentDto);
+        apiResponseDto.setOrganization(organizationDto);
         return apiResponseDto;
     }
     public APIResponseDto getDefaultDepartment(Long employeeId,Exception exception) {
